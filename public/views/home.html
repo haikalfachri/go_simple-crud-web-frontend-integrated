@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data</title>
+    <link rel="stylesheet" href="/css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <h2 class="title">
+            Biodata
+            <div class="actions">
+                <img class="button" src="icon/add.png" onclick="openForm()" alt="Add">
+            </div>
+        </h2>
+        <div class="data">
+            <div id="userData"></div>
+        </div>
+    </div>
+
+    <script>
+        function openForm() {
+            window.location.href = '/form';
+        }
+
+        function getAllUserData() {
+            fetch('http://localhost:8000/biodata', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    displayUserData(data.data);
+                })
+                .catch(function (error) {
+                    console.error('Failed:', error);
+                });
+        }
+
+        function displayUserData(userData) {
+            var userDataDiv = document.getElementById('userData');
+            userDataDiv.innerHTML = '';
+
+            if (userData.length === 0) {
+                var emptyMessage = document.createElement('label');
+                emptyMessage.textContent = 'No biodata available.';
+                userDataDiv.appendChild(emptyMessage);
+            } else {
+                userData.forEach(function (user) {
+                    var userItem = document.createElement('div');
+                    userItem.classList.add('user-item');
+                    var bod = user.bod.slice(0, 10);
+                    var gender = user.gender.charAt(0).toUpperCase() + user.gender.slice(1);
+                    userItem.innerHTML = `
+                        <div class="entry">
+                            <img class="profile-pic" src="${user.url}" alt="Profile Photo">
+                            <div class="data">
+                                <h3>${user.name}</h3>
+                                <p>Date of Birth: ${bod}</p>
+                                <p>Phone        : ${user.phone}</p>
+                                <p>Address      : ${user.address}</p>
+                                <p>Gender       : ${gender}</p>
+                            </div>
+                        </div>
+                        <div class="actions">
+                                <img class="button" src="icon/edit.png" onclick="editUser(${user.ID})" alt="Edit">
+                                <img class="button" src="icon/delete.png" onclick="deleteUser(${user.ID})" alt="Delete">
+                        </div>
+                        <hr class="divider">
+                        `;
+                    userDataDiv.appendChild(userItem);
+                });
+            }
+        }
+
+        function deleteUser(id) {
+            fetch(`http://localhost:8000/biodata/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log('User deleted:', data);
+                    getAllUserData();
+                })
+                .catch(function (error) {
+                    console.error('Failed:', error);
+                });
+        }
+
+        window.addEventListener('load', function () {
+            getAllUserData();
+        });
+    </script>
+</body>
+
+</html>

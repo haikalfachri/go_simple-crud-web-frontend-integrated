@@ -12,11 +12,6 @@ func SetUpRoutes(e *echo.Echo) {
 	biodataCtrl := controllers.InitBiodataContoller()
 	e.Renderer = utils.NewRenderer("./public/views/*.html", true)
 
-	// e.GET("/index", func(c echo.Context) error {
-	// 	data := ""
-	// 	return c.Render(http.StatusOK, "index.html", data)
-	// })
-
 	e.GET("/home", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "home.html", "")
 	})

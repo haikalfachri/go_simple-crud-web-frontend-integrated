@@ -1,4 +1,3 @@
-// home.html
 function openAddForm() {
     window.location.href = '/form';
 }
@@ -195,13 +194,12 @@ function createRadio(parentElement, label, name, value, checked) {
     parentElement.appendChild(document.createTextNode(label));
 }
 
-// add.html
 function closeForm() {
     window.location.href = '/home';
 }
 
 function addBiodata(event) {
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault();
 
     var form = document.querySelector('form');
     var name = form.querySelector('input[type="text"]').value;
@@ -242,7 +240,7 @@ function addBiodata(event) {
 }
 
 function editBiodata(event) {
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault();
 
     var form = document.querySelector('form');
     var name = form.querySelector('input[type="text"]').value;
@@ -251,6 +249,11 @@ function editBiodata(event) {
     var address = form.querySelector('input[type="address"]').value;
     var gender = form.querySelector('input[name="gender"]:checked').value;
     var profileImage = form.querySelector('#profileImage').files[0];
+
+    if (!name || !dob || !phone || !address || !gender || !profileImage) {
+        alert('Please fill in all required fields.');
+        return;
+    }
 
     var formData = new FormData();
     formData.append('name', name);

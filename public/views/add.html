@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Biodata</title>
+    <link rel="stylesheet" href="/css" type="text/css">
+    <script type = "text/javascript" src="/script"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <h2 class="title">
+            Add Biodata
+            <div class="actions">
+                <img class="button" src="icon/cancel.png" onclick="closeForm()" alt="Close">
+            </div>
+        </h2>
+        <form action="#">
+            <label>Name</label>
+            <div class="input-box">
+                <input type="text" placeholder="Enter your name" required>
+            </div>
+            <label>Date of Birth</label>
+            <div class="input-box">
+                <input type="date" placeholder="Enter your date of birth" required>
+            </div>
+            <label>Phone Number</label>
+            <div class="input-box">
+                <input type="number" placeholder="Enter your phone number" required>
+            </div>
+            <label>Address</label>
+            <div class="input-box">
+                <input type="address" placeholder="Enter your address" required>
+            </div>
+            <label>Profile Picture</label>
+            <br>
+            <input type="file" style="margin-top: 10px; margin-bottom: 20px;" accept="image/*" id="profileImage"
+                required>
+            <br>
+            <label>Gender</label>
+            <div class="gender">
+                <input type="radio" name="gender" value="male" required> Male
+                <input type="radio" name="gender" value="female" style="margin-left: 10px;"> Female
+            </div>
+            <div class="input-box button">
+                <input type="submit" value="Add" onclick="addBiodata(event)">
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

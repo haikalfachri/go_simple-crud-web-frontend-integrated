@@ -22,15 +22,21 @@ func SetUpRoutes(e *echo.Echo) {
 	})
 
 	e.GET("/form", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "form.html", "")
+		return c.Render(http.StatusOK, "add.html", "")
+	})
+
+	e.GET("/edit", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "edit.html", "")
 	})
 
 	e.GET("/biodata", biodataCtrl.GetAll)
 	e.GET("/biodata/:id", biodataCtrl.GetById)
 	e.POST("/biodata", biodataCtrl.Create)
+	e.PUT("/biodata/:id", biodataCtrl.Update)
 	e.DELETE("/biodata/:id", biodataCtrl.Delete)
 
 	e.Static("/css", "./public/views/css/style.css")
 	e.Static("/icon", "./public/assets/icon")
 	e.Static("/picture", "./public/assets/picture")
+	e.Static("/script", "./public/views/js/script.js")
 }

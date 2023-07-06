@@ -3,7 +3,6 @@ package repositories
 import (
 	"biodata/database"
 	"biodata/models"
-	"log"
 	"os"
 )
 
@@ -35,12 +34,12 @@ func (br *BiodataRepositoryImp) GetById(id string) (models.Biodata, error) {
 func (br *BiodataRepositoryImp) Create(request models.Request) (models.Biodata, error) {
 
 	var biodata models.Biodata = models.Biodata{
-		Name: request.Name,
-		Phone: request.Phone,
-		Gender: request.Gender,
+		Name:    request.Name,
+		Phone:   request.Phone,
+		Gender:  request.Gender,
 		Address: request.Address,
-		BOD: request.BOD,
-		URL: request.URL,
+		DOB:     request.DOB,
+		URL:     request.URL,
 	}
 
 	if err := database.DB.Create(&biodata).Error; err != nil {
@@ -61,6 +60,42 @@ func (br *BiodataRepositoryImp) Update(request models.Request, id string) (model
 		return models.Biodata{}, err
 	}
 
+	if biodata.Name != request.Name {
+		biodata.Name = request.Name
+	}
+
+	if biodata.DOB != request.DOB {
+		biodata.DOB = request.DOB
+	}
+
+	if biodata.Address != request.Address {
+		biodata.Address = request.Address
+	}
+
+	if biodata.Gender != request.Gender {
+		biodata.Gender = request.Gender
+	}
+
+	if biodata.Phone != request.Phone {
+		biodata.Phone = request.Phone
+	}
+
+	if biodata.URL != request.URL {
+		imgUrl := "./public/assets/picture" + biodata.URL[7:]
+
+		if err := database.DB.Unscoped().Delete(&biodata).Error; err != nil {
+			return models.Biodata{}, err
+		}
+
+		err = os.Remove(imgUrl)
+
+		if err != nil {
+			return models.Biodata{}, err
+		}
+		
+		biodata.URL = request.URL
+	}
+
 	if err := database.DB.Save(&biodata).Error; err != nil {
 		return models.Biodata{}, err
 	}
@@ -75,7 +110,6 @@ func (br *BiodataRepositoryImp) Delete(id string) error {
 	}
 
 	imgUrl := "./public/assets/picture" + biodata.URL[7:]
-	log.Println(imgUrl)
 
 	if err := database.DB.Unscoped().Delete(&biodata).Error; err != nil {
 		return err
@@ -83,8 +117,8 @@ func (br *BiodataRepositoryImp) Delete(id string) error {
 
 	err = os.Remove(imgUrl)
 
-		if err != nil {
-			return err
+	if err != nil {
+		return err
 	}
 
 	return nil

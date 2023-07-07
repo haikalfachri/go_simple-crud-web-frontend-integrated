@@ -107,7 +107,7 @@ function fillEditForm(userData) {
 
     var formElement = document.createElement('form');
     formElement.setAttribute('action', '#');
-    formElement.onsubmit = function() { return false; };
+    formElement.onsubmit = editBiodata;
 
     createInput(formElement, 'Name', 'text', 'Enter your name', userData.name, true);
     createInput(formElement, 'Date of Birth', 'date', 'Enter your date of birth', userData.dob.slice(0, 10), true);
@@ -153,7 +153,7 @@ function fillEditForm(userData) {
     var submitButton = document.createElement('input');
     submitButton.setAttribute('type', 'submit');
     submitButton.value = 'Save';
-    submitButton.onclick = editBiodata;
+    // submitButton.onclick = editBiodata;
 
     submitButtonBox.appendChild(submitButton);
     formElement.appendChild(submitButtonBox);
@@ -209,11 +209,6 @@ function addBiodata(event) {
     var gender = form.querySelector('input[name="gender"]:checked').value;
     var profileImage = form.querySelector('#profileImage').files[0];
 
-    if (name.length === 0) {
-        alert('Please fill in all required fields.');
-        return;
-    }
-
     var formData = new FormData();
     formData.append('name', name);
     formData.append('dob', dob);
@@ -250,11 +245,6 @@ function editBiodata(event) {
     var gender = form.querySelector('input[name="gender"]:checked').value;
     var profileImage = form.querySelector('#profileImage').files[0];
 
-    if (!name || !dob || !phone || !address || !gender || !profileImage) {
-        alert('Please fill in all required fields.');
-        return;
-    }
-
     var formData = new FormData();
     formData.append('name', name);
     formData.append('dob', dob);
@@ -275,11 +265,10 @@ function editBiodata(event) {
         })
         .then(function (data) {
             console.log('Success:', data);
+            window.location.href = '/home';
+            getAllUserData();
         })
         .catch(function (error) {
             console.error('Failed:', error);
         });
-
-    window.location.href = '/home';
-    getAllUserData();
 }
